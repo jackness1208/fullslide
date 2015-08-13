@@ -48,13 +48,28 @@ var fullslide = function(target, op){
 fullslide.current = 0;
 fullslide.translateY = 0;
 
+// config
+fullslide.options = {
+    // 当前子元素选中状态 className
+    currentClass: 'current',
+    // 滚动页面时触发的事件
+    onchange: function(index){},
+    // 控件初始化完成后 触发的事件
+    ready: function(){},
+    // 滚动动画 过度事件
+    transition: 500
+};
+
 fullslide.fn = fullslide.prototype = {
     init: function(target, op){
         var she = fullslide;
-
         var tar = $(target)[0];
         if(!tar){
             throw new Error('fullslide: ' + target + ' is not defined');
+            return;
+        }
+
+        if(tar.getAttribute('data-fullslide-init') == 'true'){
             return;
         }
         she.fn.setOption(op);
@@ -71,6 +86,7 @@ fullslide.fn = fullslide.prototype = {
         tar.style.height = 100 * tarItems.length +  '%';
         
 
+
         for(var i = 0, len = tarItems.length; i < len; i++){
             tarItems[i].style.height = tarItemHeight + '%';
         }
@@ -78,40 +94,93 @@ fullslide.fn = fullslide.prototype = {
         var transformPrep = fn.getCssProperty('transform');
         var transitionPrep = fn.getCssProperty('transition');
         
-        tar.style[transitionPrep] = '0.2s easein';
-        window.tar = tar;
         var touch = {
             translateY: 0,
             posY: 0,
             start: function(e){
                 touch.translateY = she.translateY;
-                touch.posY = e.touches[0].pageY;
-                console.log('start', touch.posY)
+                touch.posY = e.touches[0].pageY - she.translateY;
 
                 document.addEventListener('touchmove', touch.move, false);
                 document.addEventListener('touchend', touch.end, false);
+
+                tar.style[transitionPrep] = '';
+
+                e.preventDefault && e.preventDefault();
+                e.returnValue = false;
             },
 
             move: function(e){
                 e = e || window.event;
-                touch.translateY = touch.posY - e.touch[0].pageY;
-                console.log('move', touch.translateY)
-                tar.style[transitionPrep] = 'translate3d(0,'+ touch.translateY +'px,0)';
+                touch.translateY = e.touches[0].pageY - touch.posY;
+                
+                tar.style[transformPrep] = 'translate3d(0,'+ touch.translateY +'px,0)';
+                
+                e.preventDefault && e.preventDefault();
+                e.returnValue = false;
             },
 
             end: function(){
-                console.log('end')
-                she.translateY = touch.translateY;
+                // she.translateY = touch.translateY;
+                var distance = she.translateY - touch.translateY,
+                    current = she.current,
+                    translateY;
+                
+                // 无效操作
+                if(Math.abs(distance) < 10){ 
+
+                // 上滑
+                } else if( distance < 0){
+                    current -= 1;
+                
+                // 下滑
+                } else {
+                    current += 1;
+                }
+
+                current >= tarItems.length && (current = tarItems.length - 1);
+                current < 0 && (current = 0);
+                translateY = -current * tarItemHeight / 100 * tar.offsetHeight;
+
+
+                tar.style[transitionPrep] = she.options.transition +'ms';
+                tar.style[transformPrep] = 'translate3d(0,'+ translateY +'px,0)';
+                she.translateY = translateY;
+                she.current = current;
+                she.options.onchange(current);
+                
+                var currentClass = she.options.currentClass,
+                    classReg = new RegExp('\\s*' + currentClass + '\\s*', 'g');
+
+                for(var i = 0, myItem, len = tarItems.length; i < len; i++){
+                    myItem = tarItems[i];
+                    i == current? (
+                        !~myItem.className.indexOf(currentClass) && (myItem.className += ' ' + currentClass)
+                    ):(
+                        myItem.className = myItem.className.replace(classReg, ' ')
+                    );
+                }
+
                 document.removeEventListener('touchmove', touch.move);
                 document.removeEventListener('touchend', touch.end);
             }
         }
         tar.addEventListener('touchstart', touch.start, false);
-
+        
+        tar.setAttribute('data-fullslide-init', 'true');
+        //初始化完成
+        she.options.ready.call(tar);
+        return she;
     },
     // set options
     setOption : function(op){
-        
+        she = fullslide;
+        op = op || {};
+
+        op.currentClass && (she.options.currentClass = op.currentClass);
+        typeof op.onchange == 'function' && (she.options.onchange = op.onchange);
+        typeof op.ready == 'function' && (she.options.ready = op.ready);
+        !isNaN(op.transition) && (she.options.transition = op.transition);
     }
 
 };
@@ -140,20 +209,6 @@ var fn = {
 	    return null;
 	}
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 if ( typeof define === "function" && define.amd ) {
 	define( "fullslide", [], function() {
