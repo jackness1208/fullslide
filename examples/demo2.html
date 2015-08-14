@@ -6,23 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
 <title>fullslide DEMO</title>
-<script>
-!function(){
-    if(!/iPhone|Android/i.test(navigator.userAgent)){
-        return;
-    }
-    var screenWidth = document.documentElement.clientWidth;
-    var meta = document.createElement('meta'),
-        scale = screenWidth / 320;
-    meta.name = 'viewport';
-    meta.content = 'width=320, initial-scale='+ scale +', maximum-scale='+ scale +', minimum-scale='+ scale +', user-scalable=0';
-
-    document.getElementsByTagName('head')[0].appendChild(meta);
-}();
-</script>
 <style type="text/css">
-body, h1, h2, h3{ margin:0; padding: 0; }
-
 body{ font: 12px/1.5 Microsoft Yahei,simsun, sans-serif; margin: 0; }
 .full-body{ display: none; }
 .full-body-ready{ display: block; }
@@ -30,203 +14,26 @@ body{ font: 12px/1.5 Microsoft Yahei,simsun, sans-serif; margin: 0; }
 .full-cnt-txt{position: absolute; width: 200px; height: 200px; left: 50%; top:50%; font-size:200px; text-align:center; line-height:200px; margin:-100px 0 0 -100px;}
 .full-cnt01{ background: rgb(238, 0, 90); color:#ddd;}
 .full-cnt02{ background: rgb(51, 153, 204); color:#ddd; }
-.full-cnt03{ background: rgba(44, 62, 80, .8); color:#ddd;}
+.full-cnt03{ background: rgb(44, 62, 80); color:#ddd;}
 .full-cnt04{ background: #fff; color:#444;}
-
-/* loading animate */
-.full-loading{position: fixed; z-index: 10; left: 50%; top: 50%; -webkit-animation: loadingAni 2s linear infinite; -o-animation: loadingAni 2s linear infinite; -ms-animation: loadingAni 2s linear infinite; -moz-animation: loadingAni 2s linear infinite; animation: loadingAni 2s linear infinite;}
-.full-loading-i1,
-.full-loading-i2{ position: absolute; left: 0; top: 0;}
-.full-loading-i1:before,
-.full-loading-i2:before,
-.full-loading-i1:after,
-.full-loading-i2:after{ content:''; display: block; position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #00a0e9;}
-.full-loading-i1:before{ left: 10px; top: -5px; width: 10px; height: 10px;} /* left */
-.full-loading-i1:after{ right: 8px; top: -7px; width: 14px; height: 14px;} /* right */
-.full-loading-i2:before{ left: -6px; top: 9px; width: 12px; height: 12px;} /* bottom */
-.full-loading-i2:after{ left: -8px; bottom: 7px; width: 16px; height: 16px;} /* top */
-
-.full-loading-hide{-webkit-animation: none; -moz-animation: none; -o-animation: none; -ms-animation: none; animation: none; display: none;}
-
-@-webkit-keyframes loadingAni{
-    0%{ -webkit-transform:rotate(1deg);}
-    100%{ -webkit-transform:rotate(360deg);}
-}
-@-moz-keyframes loadingAni{
-    0%{ -moz-transform:rotate(1deg);}
-    100%{ -moz-transform:rotate(360deg);}
-}
-@-ms-keyframes loadingAni{
-    0%{ -ms-transform:rotate(1deg);}
-    100%{ -ms-transform:rotate(360deg);}
-}
-@-o-keyframes loadingAni{
-    0%{ -o-transform:rotate(1deg);}
-    100%{ -o-transform:rotate(360deg);}
-}
-@keyframes loadingAni{
-    0%{ transform:rotate(1deg);}
-    100%{ transform:rotate(360deg);}
-}
-/* slideup icon */
-.full-slideup-icon{ display: block; width: 30px; height: 30px; -webkit-animation: slideupAni 1.5s linear infinite; -moz-animation: slideupAni 1.5s linear infinite;-o-animation: slideupAni 1.5s linear infinite; -ms-animation: slideupAni 1.5s linear infinite; animation: slideupAni 1.5s linear infinite;}
-.full-slideup-icon:before,
-.full-slideup-icon:after{ content:""; display: block; position: absolute; left: 50%; margin-left: -8px; width: 15px; height: 15px; border-left: 1px solid #fff; border-top: 1px solid #fff; -webkit-transform: rotate(45deg); -moz-transform: rotate(45deg); -o-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg); }
-.full-slideup-icon:before{top: 0;}
-.full-slideup-icon:after{ top: 10px; }
-@-webkit-keyframes slideupAni{
-    0%{-webkit-transform:translate(0, 0);}
-    25%{-webkit-transform:translate(0, 5px);}
-    75%{-webkit-transform:translate(0, -5px);}
-    100%{-webkit-transform:translate(0, 0);}
-}
-@-moz-keyframes slideupAni{
-    0%{-moz-transform:translate(0, 0);}
-    25%{-moz-transform:translate(0, 5px);}
-    75%{-moz-transform:translate(0, -5px);}
-    100%{-moz-transform:translate(0, 0);}
-}
-@-o-keyframes slideupAni{
-    0%{-o-transform:translate(0, 0);}
-    25%{-o-transform:translate(0, 5px);}
-    75%{-o-transform:translate(0, -5px);}
-    100%{-o-transform:translate(0, 0);}
-}
-@-ms-keyframes slideupAni{
-    0%{-ms-transform:translate(0, 0);}
-    25%{-ms-transform:translate(0, 5px);}
-    75%{-ms-transform:translate(0, -5px);}
-    100%{-ms-transform:translate(0, 0);}
-}
-@keyframes slideupAni{
-    0%{transform:translate(0, 0);}
-    25%{transform:translate(0, 5px);}
-    75%{transform:translate(0, -5px);}
-    100%{transform:translate(0, 0);}
-}
-
-/* startify */
-.full-cnt01{}
-.full-cnt01 .s1{ position: absolute; top: 50%; width: 100%; text-align:center; font-size: 30px; margin-top: -23px;}
-.full-cnt01 .full-slideup-icon{ position: absolute; bottom: 10px; left: 50%; margin-left: -15px; }
-
-/* page01 */
-.full-cnt02{ overflow: hidden; }
-.full-cnt02 .s1{ position: absolute; left: 10px; top: 10px; font-size: 26px; font-weight: bold; -webkit-transition: 1s; -moz-transition: 1s; -o-transition: 1s; -ms-transition: 1s; transition: 1s; -webkit-transform: translate(-200px, 0); -moz-transform: translate(-200px, 0); -o-transform: translate(-200px, 0);  -ms-transform: translate(-200px, 0); transform: translate(-200px, 0);}
-.full-cnt02 .s2{ position: absolute; left: 10px; top: 50px; font-size: 16px; width: 300px; -webkit-transition: 1s 0.5s; -moz-transition: 1s 0.5s; -o-transition: 1s 0.5s; -ms-transition: 1s 0.5s; transition: 1s 0.5s; -webkit-transform: translate(-320px, 0); -moz-transform: translate(-320px, 0); -o-transform: translate(-320px, 0); -ms-transform: translate(-320px, 0); transform: translate(-320px, 0);}
-.full-cnt02 .full-slideup-icon{ position: absolute; bottom: 10px; left: 50%; margin-left: -15px; }
-.full-cnt-cur.full-cnt02{}
-.full-cnt-cur.full-cnt02 .s1,
-.full-cnt-cur.full-cnt02 .s2{ -webkit-transform: translate(0,0);  -moz-transform: translate(0,0);  -o-transform: translate(0,0);  -ms-transform: translate(0,0);  transform: translate(0,0); }
-
-/* page02 */
-.full-cnt03{ overflow: hidden; }
-.full-cnt03 .s1{ position: absolute; z-index: 5; left: 10px; top: 10px; font-size: 26px; font-weight: bold; -webkit-transition: 1s; -moz-transition: 1s; -o-transition: 1s; -ms-transition: 1s; transition: 1s; -webkit-transform: translate(-200px, 0); -moz-transform: translate(-200px, 0); -o-transform: translate(-200px, 0);  -ms-transform: translate(-200px, 0); transform: translate(-200px, 0);}
-.full-cnt03 .s2{ position: absolute; z-index:3; left: 10px; top: 50px; font-size: 12px; -webkit-transition: 1s 0.5s; -moz-transition: 1s 0.5s; -o-transition: 1s 0.5s; -ms-transition: 1s 0.5s; transition: 1s 0.5s; -webkit-transform: translate(-320px, 0); -moz-transform: translate(-320px, 0); -o-transform: translate(-320px, 0); -ms-transform: translate(-320px, 0); transform: translate(-320px, 0);}
-.full-cnt03 .s2-tb{}
-.full-cnt03 .s2-tb td{ padding:2px 5px 2px 0; vertical-align: top; }
-.full-cnt03 .s3{ position: absolute; z-index: 2; right: -20px; bottom: -20px; width: 250px; height: 250px; background: url(images/demo-img01.png) no-repeat; background-size: 250px 250px; -webkit-transition: 1s 1s; -moz-transition: 1s 1s; -o-transition: 1s 1s; -ms-transition: 1s 1s; transition: 1s 1s; -webkit-transform: translate(320px, 0); -moz-transform: translate(320px, 0); -o-transform: translate(320px, 0); -ms-transform: translate(320px, 0); transform: translate(320px, 0);}
-.full-cnt03 .s4{ position: absolute; left:-150px; top: -40px; z-index:-1; width: 600px; height: 600px; display: block; background: url(images/demo-img01.png) no-repeat; background-size: 600px 600px;  }
-.full-cnt03 .full-slideup-icon{ position: absolute; bottom: 10px; left: 50%; margin-left: -15px; z-index:6;}
-
-.full-cnt-cur.full-cnt03{}
-.full-cnt-cur.full-cnt03 .s1,
-.full-cnt-cur.full-cnt03 .s2,
-.full-cnt-cur.full-cnt03 .s3{ -webkit-transform: translate(0,0);  -moz-transform: translate(0,0);  -o-transform: translate(0,0);  -ms-transform: translate(0,0);  transform: translate(0,0); }
-
-/* page03 */
-.full-cnt04{}
-.full-cnt04 .s1{ position: absolute; top: 50%; left: 0; width: 100%; font-size: 36px; text-align:center; margin-top: -27px; }
-.full-cnt04 .s2{ position: absolute; top: 50%; left: 0; width: 100%; font-size: 14px; text-align:center; margin-top: 15px; color:#888}
 </style>
 </head>
 <body>
 <div class="full-body" id="box">
-    <!-- startify -->
-    <div class="full-cnt full-cnt01">
-        <h1 class="s1">fullslide DEMO</h1>
-        <i class="full-slideup-icon"></i>
-    </div>
-    <!--/startify -->
-
-    <!-- page01 -->
-    <div class="full-cnt full-cnt02">
-        <h3 class="s1">关岛号 - 简介</h3>
-        <div class="s2">从1938年开始美国海军决定建造这一级别的军舰，也与所获得的情报有关。1938年有情报称，日本正计划建造30000吨级，装备12英寸主炮的“超级巡洋舰”。美国对此情报的反应，就是建造更大更强的军舰。但是实际上，日本海军并没有兴趣将该计划付诸实施，反而是在获悉美国建造阿拉斯加级的消息后，才决定建造对应的新型大型巡洋舰（B64型巡洋战舰）！编号为CB2 GUAM。</div>
-        <i class="full-slideup-icon"></i>
-    </div>
-    <!--/page01 -->
-
-    <!-- page02 -->
-    <div class="full-cnt full-cnt03">
-        <h3 class="s1">关岛号 - 性能</h3>
-        <div class="s2">
-            <table class='s2-tb'>
-                <tr>
-                    <td>排水量</td>
-                    <td>设计27,000 吨、满载34,253吨</td>
-                </tr>
-                <tr>
-                    <td>主炮</td>
-                    <td>三座三联装 305 mm</td>
-                </tr>
-                <tr>
-                    <td>防空武器</td>
-                    <td>40mm高炮56座，20mm高炮34座</td>
-                </tr>
-                <tr>
-                    <td>长度（英尺）</td>
-                    <td>808' 6.0''×90' 9.375"×30' 2.348"</td>
-                </tr>
-                <tr>
-                    <td>功率</td>
-                    <td>180,000马力</td>
-                </tr>
-                <tr>
-                    <td>续航力</td>
-                    <td>12000海里/15节</td>
-                </tr>
-                <tr>
-                    <td>航速</td>
-                    <td>32节</td>
-                </tr>
-                <tr>
-                    <td>舰员</td>
-                    <td>1517 人</td>
-                </tr>
-                <tr>
-                    <td>设计功率</td>
-                    <td>156,000</td>
-                </tr>
-                <tr>
-                    <td>装甲厚度</td>
-                    <td>主装甲 9.0 寸<br/>侧甲 5.0寸</td>
-                </tr>
-            </table>
-        </div>
-        <div class='s3'></div>
-        <div class='s4'></div>
-        <i class="full-slideup-icon"></i>
-    </div>
-    <!--/page02 -->
-
-    <!-- page03 -->
-    <div class="full-cnt full-cnt04">
-        <span class="s1">DEMO END</span>
-        <span class="s2">Power by Jackness</span>
-    </div>
-    <!--/page03 -->
+    <div class="full-cnt full-cnt01"><span class="full-cnt-txt">1</span></div>
+    <div class="full-cnt full-cnt02"><span class="full-cnt-txt">2</span></div>
+    <div class="full-cnt full-cnt03"><span class="full-cnt-txt">3</span></div>
+    <div class="full-cnt full-cnt04"><span class="full-cnt-txt">4</span></div>
 </div>
-<div class="full-loading" id='loading'><i class="full-loading-i1"></i><i class="full-loading-i2"></i></div>
 <script type="text/javascript" charset="utf-8" src="../js/fullslide.js"></script>
 <script type="text/javascript" charset="utf-8">
-fullslide('#box', {
+var ctrl = fullslide('#box', {
     currentClass: 'full-cnt-cur',
     ready: function(){
         this.className += ' full-body-ready';
-
-        var loadingElm = document.getElementById('loading');
-        loadingElm.className += ' full-loading-hide';
+        setInterval(function(){
+            ctrl.current = (ctrl.current + 1) % 4
+        }, 1000);
     }
 });
 </script>

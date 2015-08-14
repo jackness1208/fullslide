@@ -20,33 +20,14 @@ body{ font: 12px/1.5 Microsoft Yahei,simsun, sans-serif; margin: 0; }
 </head>
 <body>
 <div class="full-body" id="box">
-    <!-- startify -->
-    <div class="full-cnt full-cnt01">
-        <span class="full-cnt-txt">1</span>
-    </div>
-    <!--/startify -->
-
-    <!-- page01 -->
-    <div class="full-cnt full-cnt02">
-        <span class="full-cnt-txt">2</span>
-    </div>
-    <!--/page01 -->
-
-    <!-- page02 -->
-    <div class="full-cnt full-cnt03">
-        <span class="full-cnt-txt">3</span>
-    </div>
-    <!--/page02 -->
-
-    <!-- page03 -->
-    <div class="full-cnt full-cnt04">
-        <span class="full-cnt-txt">4</span>
-    </div>
-    <!--/page03 -->
+    <div class="full-cnt full-cnt01"><span class="full-cnt-txt">1</span></div>
+    <div class="full-cnt full-cnt02"><span class="full-cnt-txt">2</span></div>
+    <div class="full-cnt full-cnt03"><span class="full-cnt-txt">3</span></div>
+    <div class="full-cnt full-cnt04"><span class="full-cnt-txt">4</span></div>
 </div>
 <script type="text/javascript" charset="utf-8" src="../js/fullslide.js"></script>
 <script type="text/javascript" charset="utf-8">
-fullslide('#box', {
+var ctrl = fullslide('#box', {
     currentClass: 'full-cnt-cur',
     ready: function(){
         this.className += ' full-body-ready';

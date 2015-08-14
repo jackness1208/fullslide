@@ -54,12 +54,12 @@
 
 |参数|类型|说明|
 |----|----|----|
-|current|{int}|当前选中的屏幕序号|
+|current|{int}|获取 or 设置当前选中的屏幕序号|
 |target|{object}|组件初始化的目标对象|
 |items|{Array}|组件的内的屏幕集合|
 |isSupport|{boolean}|当前 浏览器是否支持 本组件|
-|pageTo(current)|{function}|设置翻页到第几个屏幕|
 
 ## 例子
 * [例子一](examples/demo.html)
 * [例子二](examples/demo2.html)
+* [例子三](examples/demo3.html)

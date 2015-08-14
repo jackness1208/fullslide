@@ -68,42 +68,34 @@ var fullslide = function(target, op){
 };
 
 // 值初始化
-fullslide.current = 0;
+// fullslide.current = 0;
 fullslide.translateY = 0;
 fullslide.target = undefined;
 fullslide.items = [];
-fullslide.itemHeight = 0;
 fullslide.isSupport = !UA.ie || UA.ie > 9;
-fullslide.pageTo = function(current){
-    var she = fullslide,
-        tarItems = she.items,
-        tarItemHeight = she.itemHeight,
-        tar = she.target;
 
-    current >= tarItems.length && (current = tarItems.length - 1);
-    current < 0 && (current = 0);
-    
-    var translateY = -current * tarItemHeight / 100 * tar.offsetHeight;
-
-
-    tar.style[transitionPrep] = she.options.transition +'ms';
-    tar.style[transformPrep] = 'translate3d(0,'+ translateY +'px,0)';
-    she.translateY = translateY;
-    she.current = current;
-    she.options.onchange.call(she.items[current], current);
-    
-    var currentClass = she.options.currentClass,
-        classReg = new RegExp('\\s*' + currentClass + '\\s*', 'g');
-
-    for(var i = 0, myItem, len = tarItems.length; i < len; i++){
-        myItem = tarItems[i];
-        i == current? (
-            !~myItem.className.indexOf(currentClass) && (myItem.className += ' ' + currentClass)
-        ):(
-            myItem.className = myItem.className.replace(classReg, ' ')
-        );
-    }
+fullslide.__data = {
+    current: 0,
+    itemHeight: 0
 };
+
+Object.defineProperty 
+&& Object.defineProperty(fullslide, 'current', {
+    configurable: true,
+    enumerable: true,
+    get: function(){
+        return this.__data.current;
+    },
+
+    set: function(current){
+        if(!isNaN(current)){
+            current >= she.items.length && (current = she.items.length - 1);
+            current < 0 && (current = 0);
+            she.__data.current = current;
+            this.fn.slide();
+        }
+    }
+});
 
 // config
 fullslide.options = {
@@ -187,7 +179,6 @@ fullslide.fn = fullslide.prototype = {
             end: function(){
                 // she.translateY = touch.translateY;
                 var distance = she.translateY - touch.translateY,
-                    current = she.current,
                     translateY;
                 
                 // 无效操作
@@ -195,15 +186,14 @@ fullslide.fn = fullslide.prototype = {
 
                 // 上滑
                 } else if( distance < 0){
-                    current -= 1;
+                    she.current -= 1;
                 
                 // 下滑
                 } else {
-                    current += 1;
+                    she.current += 1;
                 }
 
-                she.pageTo(current);
-
+                // she.fn.pageTo(current);
                 document.removeEventListener('touchmove', touch.move);
                 document.removeEventListener('touchend', touch.end);
             }
@@ -214,7 +204,7 @@ fullslide.fn = fullslide.prototype = {
         
         she.target = tar;
         she.items = tarItems;
-        she.itemHeight = tarItemHeight;
+        she.__data.itemHeight = tarItemHeight;
 
         //初始化完成
         she.options.ready.call(tar);
@@ -231,7 +221,32 @@ fullslide.fn = fullslide.prototype = {
         typeof op.onerror == 'function' && (she.options.onerror = op.onerror);
         !isNaN(op.transition) && (she.options.transition = op.transition);
     },
-    
+    slide: function(){
+        var she = fullslide;
+
+        var current = she.current,
+            tarItemHeight = she.__data.itemHeight,
+            tar = she.target,
+            tarItems = she.items,
+            translateY = -current * tarItemHeight / 100 * tar.offsetHeight;
+        
+        tar.style[transitionPrep] = she.options.transition +'ms';
+        tar.style[transformPrep] = 'translate3d(0,'+ translateY +'px,0)';
+        she.translateY = translateY;
+        she.options.onchange.call(she.items[current], current);
+        
+        var currentClass = she.options.currentClass,
+            classReg = new RegExp('\\s*' + currentClass + '\\s*', 'g');
+
+        for(var i = 0, myItem, len = tarItems.length; i < len; i++){
+            myItem = tarItems[i];
+            i == current? (
+                !~myItem.className.indexOf(currentClass) && (myItem.className += ' ' + currentClass)
+            ):(
+                myItem.className = myItem.className.replace(classReg, ' ')
+            );
+        }
+    }
 
 };
 
