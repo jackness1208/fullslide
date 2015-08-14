@@ -32,12 +32,35 @@ var $ = window.$ || function(source){
         return [];
     }
 };
+var fn = {
+    getCssProperty:function(cssProperty){
+		var firstLetter = cssProperty.substr(0,1),
+	        otherStrs = cssProperty.substr(1),
+	        fUpperStrs = firstLetter.toUpperCase() + otherStrs,
+	        fLowerStrs = firstLetter.toLowerCase() + otherStrs,
+	        privateAttrs = [
+	            fLowerStrs,
+	            "Webkit" + fUpperStrs,
+	            "Moz" + fUpperStrs,
+	            "O" + fUpperStrs,
+	            "-ms-" + fUpperStrs,
+	            "ms" + fUpperStrs
+	        ],
+	        style = document.documentElement.style;
+	    for(var i = 0, len = privateAttrs.length; i < len; i++){
+	        var fCssAttr = privateAttrs[i];
+	        if(fCssAttr in style){
+	            return fCssAttr;
+	        }
+	    }
+	    return null;
+	}
+};
+var transformPrep = fn.getCssProperty('transform');
+var transitionPrep = fn.getCssProperty('transition');
 
-// 本插件只支持 ie 9+
-if(UA.ie && UA.ie < 9){
-    throw new Error('fullslide is not supported ie blow 9');
-    return;
-}
+
+
 
 
 var fullslide = function(target, op){
@@ -47,6 +70,40 @@ var fullslide = function(target, op){
 // 值初始化
 fullslide.current = 0;
 fullslide.translateY = 0;
+fullslide.target = undefined;
+fullslide.items = [];
+fullslide.itemHeight = 0;
+fullslide.isSupport = !UA.ie || UA.ie > 9;
+fullslide.pageTo = function(current){
+    var she = fullslide,
+        tarItems = she.items,
+        tarItemHeight = she.itemHeight,
+        tar = she.target;
+
+    current >= tarItems.length && (current = tarItems.length - 1);
+    current < 0 && (current = 0);
+    
+    var translateY = -current * tarItemHeight / 100 * tar.offsetHeight;
+
+
+    tar.style[transitionPrep] = she.options.transition +'ms';
+    tar.style[transformPrep] = 'translate3d(0,'+ translateY +'px,0)';
+    she.translateY = translateY;
+    she.current = current;
+    she.options.onchange.call(she.items[current], current);
+    
+    var currentClass = she.options.currentClass,
+        classReg = new RegExp('\\s*' + currentClass + '\\s*', 'g');
+
+    for(var i = 0, myItem, len = tarItems.length; i < len; i++){
+        myItem = tarItems[i];
+        i == current? (
+            !~myItem.className.indexOf(currentClass) && (myItem.className += ' ' + currentClass)
+        ):(
+            myItem.className = myItem.className.replace(classReg, ' ')
+        );
+    }
+};
 
 // config
 fullslide.options = {
@@ -54,6 +111,10 @@ fullslide.options = {
     currentClass: 'current',
     // 滚动页面时触发的事件
     onchange: function(index){},
+    // 当控件不支持时触发的事件
+    onerror: function(msg){
+        throw new Error(msg);
+    },
     // 控件初始化完成后 触发的事件
     ready: function(){},
     // 滚动动画 过度事件
@@ -64,8 +125,12 @@ fullslide.fn = fullslide.prototype = {
     init: function(target, op){
         var she = fullslide;
         var tar = $(target)[0];
+
+        if(!she.isSupport){
+            she.options.onerror('your browser is not supported this widget');
+        }
         if(!tar){
-            throw new Error('fullslide: ' + target + ' is not defined');
+            she.options.onerror('fullslide: ' + target + ' is not defined');
             return;
         }
 
@@ -91,8 +156,7 @@ fullslide.fn = fullslide.prototype = {
             tarItems[i].style.height = tarItemHeight + '%';
         }
         
-        var transformPrep = fn.getCssProperty('transform');
-        var transitionPrep = fn.getCssProperty('transition');
+        
         
         var touch = {
             translateY: 0,
@@ -138,28 +202,7 @@ fullslide.fn = fullslide.prototype = {
                     current += 1;
                 }
 
-                current >= tarItems.length && (current = tarItems.length - 1);
-                current < 0 && (current = 0);
-                translateY = -current * tarItemHeight / 100 * tar.offsetHeight;
-
-
-                tar.style[transitionPrep] = she.options.transition +'ms';
-                tar.style[transformPrep] = 'translate3d(0,'+ translateY +'px,0)';
-                she.translateY = translateY;
-                she.current = current;
-                she.options.onchange(current);
-                
-                var currentClass = she.options.currentClass,
-                    classReg = new RegExp('\\s*' + currentClass + '\\s*', 'g');
-
-                for(var i = 0, myItem, len = tarItems.length; i < len; i++){
-                    myItem = tarItems[i];
-                    i == current? (
-                        !~myItem.className.indexOf(currentClass) && (myItem.className += ' ' + currentClass)
-                    ):(
-                        myItem.className = myItem.className.replace(classReg, ' ')
-                    );
-                }
+                she.pageTo(current);
 
                 document.removeEventListener('touchmove', touch.move);
                 document.removeEventListener('touchend', touch.end);
@@ -168,6 +211,11 @@ fullslide.fn = fullslide.prototype = {
         tar.addEventListener('touchstart', touch.start, false);
         
         tar.setAttribute('data-fullslide-init', 'true');
+        
+        she.target = tar;
+        she.items = tarItems;
+        she.itemHeight = tarItemHeight;
+
         //初始化完成
         she.options.ready.call(tar);
         return she;
@@ -180,35 +228,13 @@ fullslide.fn = fullslide.prototype = {
         op.currentClass && (she.options.currentClass = op.currentClass);
         typeof op.onchange == 'function' && (she.options.onchange = op.onchange);
         typeof op.ready == 'function' && (she.options.ready = op.ready);
+        typeof op.onerror == 'function' && (she.options.onerror = op.onerror);
         !isNaN(op.transition) && (she.options.transition = op.transition);
-    }
+    },
+    
 
 };
 
-var fn = {
-    getCssProperty:function(cssProperty){
-		var firstLetter = cssProperty.substr(0,1),
-	        otherStrs = cssProperty.substr(1),
-	        fUpperStrs = firstLetter.toUpperCase() + otherStrs,
-	        fLowerStrs = firstLetter.toLowerCase() + otherStrs,
-	        privateAttrs = [
-	            fLowerStrs,
-	            "Webkit" + fUpperStrs,
-	            "Moz" + fUpperStrs,
-	            "O" + fUpperStrs,
-	            "-ms-" + fUpperStrs,
-	            "ms" + fUpperStrs
-	        ],
-	        style = document.documentElement.style;
-	    for(var i = 0, len = privateAttrs.length; i < len; i++){
-	        var fCssAttr = privateAttrs[i];
-	        if(fCssAttr in style){
-	            return fCssAttr;
-	        }
-	    }
-	    return null;
-	}
-};
 
 if ( typeof define === "function" && define.amd ) {
 	define( "fullslide", [], function() {

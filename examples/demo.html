@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="HandheldFriendly" content="true">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<title>fullslide DEMO</title>
+<style type="text/css">
+body{ font: 12px/1.5 Microsoft Yahei,simsun, sans-serif; margin: 0; }
+.full-body{ display: none; }
+.full-body-ready{ display: block; }
+.full-cnt{position: relative; width: 100%; height: 100%;}
+.full-cnt-txt{position: absolute; width: 200px; height: 200px; left: 50%; top:50%; font-size:200px; text-align:center; line-height:200px; margin:-100px 0 0 -100px;}
+.full-cnt01{ background: rgb(238, 0, 90); color:#ddd;}
+.full-cnt02{ background: rgb(51, 153, 204); color:#ddd; }
+.full-cnt03{ background: rgb(44, 62, 80); color:#ddd;}
+.full-cnt04{ background: #fff; color:#444;}
+</style>
+</head>
+<body>
+<div class="full-body" id="box">
+    <!-- startify -->
+    <div class="full-cnt full-cnt01">
+        <span class="full-cnt-txt">1</span>
+    </div>
+    <!--/startify -->
+
+    <!-- page01 -->
+    <div class="full-cnt full-cnt02">
+        <span class="full-cnt-txt">2</span>
+    </div>
+    <!--/page01 -->
+
+    <!-- page02 -->
+    <div class="full-cnt full-cnt03">
+        <span class="full-cnt-txt">3</span>
+    </div>
+    <!--/page02 -->
+
+    <!-- page03 -->
+    <div class="full-cnt full-cnt04">
+        <span class="full-cnt-txt">4</span>
+    </div>
+    <!--/page03 -->
+</div>
+<script type="text/javascript" charset="utf-8" src="../js/fullslide.js"></script>
+<script type="text/javascript" charset="utf-8">
+fullslide('#box', {
+    currentClass: 'full-cnt-cur',
+    ready: function(){
+        this.className += ' full-body-ready';
+    }
+});
+</script>
+</body>
+</html>
