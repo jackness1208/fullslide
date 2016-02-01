@@ -81,6 +81,9 @@ fullslide(target, option);
 ```
 
 ## 更新记录
+> 1.1.1
+> * [FIX] 修复横向滑动添加跳转地址没反应问题
+
 > 1.1.0
 > * [ADD] 支持 横向、纵向滚动
 > * [ADD] 新增 options.fullpage 属性

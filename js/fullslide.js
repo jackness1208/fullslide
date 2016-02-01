@@ -2,8 +2,8 @@
  * Copyright 2016, jackness.org
  * Creator: Jackness Lau
  * $Author: Jackness Lau $
- * $Date: 2016.01.17 $
- * $Version: 1.1.0 $
+ * $Date: 2016.02.01 $
+ * $Version: 1.1.1 $
  */
 (function( global, factory ){
     if ( typeof module === "object" && typeof module.exports === "object" ) {
@@ -446,8 +446,8 @@ var init = fullslide.fn.init = function(target, op){
 
             tar.style[transitionPrep] = '';
 
-            e.preventDefault && e.preventDefault();
-            e.returnValue = false;
+            // e.preventDefault && e.preventDefault();
+            // e.returnValue = false;
             o.auto && she.auto.clear(she);
         },
 
